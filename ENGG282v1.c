@@ -12,9 +12,9 @@ void moveForward() {
 	wait1Msec(1000);
 }
 
-void turnRight() {
-	motor[mtrRHS] = -25;
-	motor[mtrLHS] = 25;
+void turnLeft() {
+	motor[mtrRHS] = 25;
+	motor[mtrLHS] = -25;
 	wait1Msec(720);
 	motor[mtrRHS] = 0;
 	motor[mtrLHS] = 0;
@@ -57,17 +57,17 @@ void tSonarFront()
 {
 		// Variables for sonar reading and distance from front
 		int sonarValue = SensorValue(snrFRNT);
-		int distFromFront = 40;
+		int distFromFront = 20;
 
 		// If there is a range error - i.e sonar not receiving sonar signal back
 		if (sonarValue == 255)
   	{
  		 	moveForward();
  		}
-		// The front wall is close, turn away from it
+		// The front wall is close, turn away from it, move back first
 		else if (sonarValue < distFromFront)
 		{
-			turnRight();
+			turnLeft();
 			wait1Msec(1000);
 		}
 		// Continue forwards
@@ -123,6 +123,7 @@ task main()
 		// 2. It does not sense a wall on the right, so turns right to find a wall
 		// 3. It sees the light and moves towards it
 
+		tSonarRight();
 		tSonarRight();
 		tSonarFront();
 	}
