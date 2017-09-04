@@ -7,6 +7,7 @@
 
 //CODE FOR ENGG282 - V1 - 18-07-17
 ///////////////////////////////////////////////////////////////////////////////////////////
+int steps[150];
 //Condition 1
 void moveForward() {
 	motor[mtrRHS] = 25;
@@ -61,34 +62,16 @@ void action(int i, int pos) {
 	}
 	else {
 	//GO BACK THROUGH STEPS ARRAY - LIGHT HAS BEEN FOUND SO GO HOME TO START POS
-		returnToBase();
+		//returnToBase();
 	}
 }
 ///////////////////////////////////////////////////////////////////////////////////////////
-int tLight()
-{
-	// Variables for light value and whether the light is found
-	int lightSensor = SensorValue(lghtSNS);
-	bool lightFound = false;
-	if (lightSensor > 32){
-			lightFound = true;
-	}
-	else {
-			return 0;
-	}
-	while (lightFound) {
-		int[9] valueLights
-		//set zero
-		//go forward for 200ms
-		//check for light again
-	}
-	return 5;
-}
+//tLight
 int tSonarFront()
 {
 		// Variables for sonar reading and distance from front
 		int sonarValue = SensorValue(snrFRNT);
-		int distFromFront = 20;
+		int distFromFront = 30;
 
 		// If there is a range error - i.e sonar not receiving sonar signal back
 		if (sonarValue == 255)
@@ -115,7 +98,7 @@ int tSonarRight()
 	int distFromRight = 25;
 	//If there is a range error - i.e sonar not receiving sonar signal back
 	if (sonarValue == 255){
-  	moveForward();
+  	return 1;
   }
   // Turn needs to be made
   else if (sonarValue > distFromRight)
@@ -123,6 +106,7 @@ int tSonarRight()
   	//wallGap();
   	return 4;
   }
+  /*
   //CORRECTION CODE
   //If the sonar is returning a range within 16-24, then it is relatively close to the wall
   else if(sonarValue >= 20 && sonarValue <=24) {
@@ -145,19 +129,18 @@ int tSonarRight()
   		return 1;
 
   	}
-  }
+  	*/
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 task main()
 {
-	int[150] steps;
 	int pos = 0;
 	while (true)
 	{
 		int x = tSonarFront();
 		wait1Msec(200);
 		int y = tSonarRight();
-		int z = tLight();
+		//int z = tLight();
 		//Modify this for three conditions
 		if(x > y)
 		{
