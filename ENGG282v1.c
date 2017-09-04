@@ -10,9 +10,9 @@
 int steps[150];
 //Condition 1
 void moveForward() {
-	motor[mtrRHS] = 25;
-	motor[mtrLHS] = 25;
-	wait1Msec(100);
+	motor[mtrRHS] = 32;
+	motor[mtrLHS] = 32;
+	wait1Msec(2000);
 }
 //Condition 2
 void turnLeft() {
@@ -71,7 +71,7 @@ int tSonarFront()
 {
 		// Variables for sonar reading and distance from front
 		int sonarValue = SensorValue(snrFRNT);
-		int distFromFront = 30;
+		int distFromFront = 25;
 
 		// If there is a range error - i.e sonar not receiving sonar signal back
 		if (sonarValue == 255)
@@ -95,7 +95,7 @@ int tSonarFront()
 int tSonarRight()
 {
 	int sonarValue = SensorValue(snrRHS);
-	int distFromRight = 25;
+	int distFromRight = 28;
 	//If there is a range error - i.e sonar not receiving sonar signal back
 	if (sonarValue == 255){
   	return 1;
