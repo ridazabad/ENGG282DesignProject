@@ -10,40 +10,36 @@
 int steps[150];
 //Condition 1
 void moveForward() {
-	motor[mtrRHS] = 32;
-	motor[mtrLHS] = 32;
+	motor[mtrRHS] = 30;
+	motor[mtrLHS] = 30;
 	wait1Msec(2000);
 }
 //Condition 2
 void turnLeft() {
+	motor[mtrRHS] = 0;
+	motor[mtrLHS] = 0;
+	wait1Msec(50);
 	motor[mtrRHS] = 25;
 	motor[mtrLHS] = -25;
-	wait1Msec(720);
+	wait1Msec(820);
 	motor[mtrRHS] = 0;
 	motor[mtrLHS] = 0;
 }
 //Condition 3
 void turnRight() {
-	motor[mtrRHS] = 25;
-	motor[mtrLHS] = -25;
-	wait1Msec(720);
 	motor[mtrRHS] = 0;
 	motor[mtrLHS] = 0;
-}
-//Condition 4
-void wallGap() {
-	//Move forward for a lil bit
-	motor[mtrRHS] = 25;
-	motor[mtrLHS] = 25;
-	wait1Msec(500);
-	//RHS turn
+	wait1Msec(50);
 	motor[mtrRHS] = -25;
 	motor[mtrLHS] = 25;
-	wait1Msec(720);
-	//Move forward again slightly
-	motor[mtrRHS] = 25;
-	motor[mtrLHS] = 25;
-	wait1Msec(1000);
+	wait1Msec(820);
+	motor[mtrRHS] = 0;
+	motor[mtrLHS] = 0;
+	wait1Msec(50);
+	motor[mtrRHS] = 30;
+	motor[mtrLHS] = 30;
+	wait1Msec(2000);
+
 }
 //Method to control the robot
 void action(int i, int pos) {
@@ -52,13 +48,10 @@ void action(int i, int pos) {
 		moveForward();
 	}
 	else if (i == 2) {
-		turnRight();
-	}
-	else if (i == 3) {
 		turnLeft();
 	}
-	else if (i == 4){
-		wallGap();
+	else if (i == 3) {
+		turnRight();
 	}
 	else {
 	//GO BACK THROUGH STEPS ARRAY - LIGHT HAS BEEN FOUND SO GO HOME TO START POS
@@ -83,7 +76,7 @@ int tSonarFront()
 		else if (sonarValue < distFromFront)
 		{
 			//turnLeft();
-		return 3;
+		return 2;
 		}
 		// Move forward as normal
 		else
@@ -104,7 +97,7 @@ int tSonarRight()
   else if (sonarValue > distFromRight)
   {
   	//wallGap();
-  	return 4;
+  	return 3;
   }
   /*
   //CORRECTION CODE
