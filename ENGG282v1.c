@@ -10,141 +10,170 @@
 int steps[150];
 //Condition 1
 void moveForward() {
-	motor[mtrRHS] = 30;
-	motor[mtrLHS] = 30;
-	wait1Msec(2000);
+    motor[mtrRHS] = 22;
+    motor[mtrLHS] = 22;
+    wait1Msec(2830);
+    motor[mtrRHS] = 0;
+    motor[mtrLHS] = 0;
+    wait1Msec(500);
 }
 //Condition 2
 void turnLeft() {
-	motor[mtrRHS] = 0;
-	motor[mtrLHS] = 0;
-	wait1Msec(50);
-	motor[mtrRHS] = 25;
-	motor[mtrLHS] = -25;
-	wait1Msec(820);
-	motor[mtrRHS] = 0;
-	motor[mtrLHS] = 0;
+    motor[mtrRHS] = 0;
+    motor[mtrLHS] = 0;
+    wait1Msec(200);
+    motor[mtrRHS] = 15;
+    motor[mtrLHS] = -15;
+    wait1Msec(1430);
+    motor[mtrRHS] = 0;
+    motor[mtrLHS] = 0;
+    wait1Msec(500);
 }
 //Condition 3
 void turnRight() {
-	motor[mtrRHS] = 0;
-	motor[mtrLHS] = 0;
-	wait1Msec(50);
-	motor[mtrRHS] = -25;
-	motor[mtrLHS] = 25;
-	wait1Msec(820);
-	motor[mtrRHS] = 0;
-	motor[mtrLHS] = 0;
-	wait1Msec(50);
-	motor[mtrRHS] = 30;
-	motor[mtrLHS] = 30;
-	wait1Msec(2000);
+    motor[mtrRHS] = 0;
+    motor[mtrLHS] = 0;
+    wait1Msec(50);
+    motor[mtrRHS] = -15;
+    motor[mtrLHS] = 15;
+    wait1Msec(1430);
+    motor[mtrRHS] = 0;
+    motor[mtrLHS] = 0;
+    wait1Msec(500);
+    motor[mtrRHS] = 22;
+    motor[mtrLHS] = 22;
+    wait1Msec(2830);
+    motor[mtrRHS] = 0;
+    motor[mtrLHS] = 0;
+    wait1Msec(500);
 
+}
+void lightFnc(){
+		motor[mtrRHS] = 20;
+    motor[mtrLHS] = 20;
+    wait1Msec(3000);
+    motor[mtrRHS] = 0;
+    motor[mtrLHS] = 0;
+    wait1Msec(100);
+    motor[mtrRHS] = -15;
+    motor[mtrLHS] = -15;
+    wait1Msec(1500);
+    motor[mtrRHS] = 0;
+    motor[mtrLHS] = 0;
+    wait1Msec(100);
+    motor[mtrRHS] = 20;
+    motor[mtrLHS] = 20;
+    wait1Msec(3000);
+    motor[mtrRHS] = 0;
+    motor[mtrLHS] = 0;
+    wait1Msec(100);
+    motor[mtrRHS] = -15;
+    motor[mtrLHS] = -15;
+    wait1Msec(1500);
+    motor[mtrRHS] = 0;
+    motor[mtrLHS] = 0;
+    wait1Msec(100);
 }
 //Method to control the robot
 void action(int i, int pos) {
-	steps[pos] = i;
-	if (i == 1){
-		moveForward();
-	}
-	else if (i == 2) {
-		turnLeft();
-	}
-	else if (i == 3) {
-		turnRight();
-	}
-	else {
-	//GO BACK THROUGH STEPS ARRAY - LIGHT HAS BEEN FOUND SO GO HOME TO START POS
-		//returnToBase();
-	}
+    steps[pos] = i;
+    if (i == 1){
+        moveForward();
+    }
+    else if (i == 2) {
+        turnLeft();
+    }
+    else if (i == 3) {
+        turnRight();
+    }
+    else if(i == 4){
+    		lightFnc();
+  	}
+    else {
+    	return;
+    }
 }
 ///////////////////////////////////////////////////////////////////////////////////////////
 //tLight
+int tLight(){
+				int lightSensor = SensorValue(lghtSNS);
+				int distance = 34;
+				
+				//CHeck if it sees a light
+				if(lightSensor <= distance){
+						return 4;
+				}
+				else{
+						return 1;
+				}
+}
 int tSonarFront()
 {
-		// Variables for sonar reading and distance from front
-		int sonarValue = SensorValue(snrFRNT);
-		int distFromFront = 25;
+        // Variables for sonar reading and distance from front
+        int sonarValue = SensorValue(snrFRNT);
+        int distFromFront = 25;
 
-		// If there is a range error - i.e sonar not receiving sonar signal back
-		if (sonarValue == 255)
-  	{
-  		//moveForward
- 		 	return 1;
- 		}
-		// The front wall is close, turn to the left of it, move back first
-		else if (sonarValue < distFromFront)
-		{
-			//turnLeft();
-		return 2;
-		}
-		// Move forward as normal
-		else
-		{
-			//moveForward();
-			return 1;
-		}
+        // If there is a range error - i.e sonar not receiving sonar signal back
+        if (sonarValue == 255)
+    {
+        //moveForward
+            return 1;
+        }
+        // The front wall is close, turn to the left of it, move back first
+        else if (sonarValue < distFromFront)
+        {
+            //turnLeft();
+        return 2;
+        }
+        // Move forward as normal
+        else
+        {
+            //moveForward();
+            return 1;
+        }
 }
 int tSonarRight()
 {
-	int sonarValue = SensorValue(snrRHS);
-	int distFromRight = 28;
-	//If there is a range error - i.e sonar not receiving sonar signal back
-	if (sonarValue == 255){
-  	return 1;
-  }
-  // Turn needs to be made
-  else if (sonarValue > distFromRight)
-  {
-  	//wallGap();
-  	return 3;
-  }
-  /*
-  //CORRECTION CODE
-  //If the sonar is returning a range within 16-24, then it is relatively close to the wall
-  else if(sonarValue >= 20 && sonarValue <=24) {
-  	// Too far away from the wall, set the RHS wheel to go slower so that it turns towards the wall
-  	if(sonarValue > 22){
-  		motor[mtrRHS] = 23;
-  		motor[mtrLHS] = 25;
-  		wait1Msec(200);
+    int sonarValue = SensorValue(snrRHS);
+    int distFromRight = 28;
+    //If there is a range error - i.e sonar not receiving sonar signal back
+    if (sonarValue == 255){
+    return 1;
   	}
-  	// Too close to the wall, set the LHS wheel to go slower so that it turns away from the wall
-  	else if (sonarValue < 22){
-  		motor[mtrRHS] = 25;
-  		motor[mtrLHS] = 23;
-  		wait1Msec(200);
-  	}
-  	// Else, all is well, continue moving forward on the path
-  	else
+  	// Turn needs to be made
+  	else if (sonarValue > distFromRight)
   	{
-  		//moveForward();
-  		return 1;
-
+    //wallGap();
+    return 3;
   	}
-  	*/
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 task main()
 {
-	int pos = 0;
-	while (true)
-	{
-		int x = tSonarFront();
-		wait1Msec(200);
-		int y = tSonarRight();
-		//int z = tLight();
-		//Modify this for three conditions
-		if(x > y)
-		{
-			action(x, pos);
-		}
-		else
-		{
-			action(y, pos);
-		}
-		pos = pos + 1;
-	}
+    int pos = 0;
+    while (true)
+    {
+    		int z = tLight();
+    		wait1Msec(200);
+        int x = tSonarFront();
+        wait1Msec(200);
+        int y = tSonarRight();
+        //int z = tLight();
+        //Modify this for three conditions
+        if(z > x)
+        {
+            action(z, pos);
+        }
+        else if(x >= y)
+        {
+            action(x, pos);
+        }
+        else if(y > x)
+      	{
+      			action(y, pos);
+    		}
+        pos = pos + 1;
+    }
 
 }
 // Concept 1: This
